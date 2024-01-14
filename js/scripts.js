@@ -1,15 +1,21 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var svgContainer = d3
-        .select('.graph')
-        .append('svg')
-        .attr('width', graphWidth + 100)
-        .attr('height', graphHeight + 60);
-
     var tooltip = d3
         .select('.graph')
         .append('div')
         .attr('id', 'tooltip')
         .style('opacity', 0);
+
+    var overlay = d3
+        .select('.graph')
+        .append('div')
+        .attr('class', 'overlay')
+        .style('opacity', 0);
+
+    var svgContainer = d3
+        .select('.graph')
+        .append('svg')
+        .attr('width', graphWidth + 100)
+        .attr('height', graphHeight + 60);
 
     d3.json(dataSource)
         .then((jsonData) => {
@@ -100,5 +106,38 @@ document.addEventListener('DOMContentLoaded', function () {
                     return d;
                 })
                 .attr('transform', 'translate(60, 0)')
-        });
+                .attr('index', (d, i) => i)
+                .on('mouseover', function (event, d) {
+                    var i = this.getAttribute('index');
+                    var barX = xScale(dateObjects[i]) + 60;
+
+                    overlay
+                        .transition()
+                        .duration(0)
+                        .style('height', d + 'px')
+                        .style('width', barWidth + 'px')
+                        .style('opacity', 0.9)
+                        .style('left', barX + 'px')
+                        .style('top', graphHeight - d + 'px')
+                        .style('transform', 'translateX(0px)');
+                    tooltip.transition().duration(200).style('opacity', 0.9);
+                    tooltip
+                        .html(
+                            dateStrings[i] +
+                            '<br>' +
+                            '$' +
+                            GDP[i].toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +
+                            ' Billion'
+                        )
+                        .attr('data-date', jsonData.data[i][0])
+                        .style('left', barX + 30 + 'px')
+                        .style('top', graphHeight - 100 + 'px')
+                        .style('transform', 'translateX(0px)');
+                })
+                .on('mouseout', function () {
+                    tooltip.transition().duration(200).style('opacity', 0);
+                    overlay.transition().duration(200).style('opacity', 0);
+                });
+        })
+        .catch((e) => console.log(e));
 });
