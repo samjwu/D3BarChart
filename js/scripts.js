@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             var xMax = new Date(d3.max(dateObjects));
-            xMax.setMonth(xMax.getMonth() + 3);
+            xMax.setMonth(xMax.getMonth());
 
             var xScale = d3
                 .scaleTime()
@@ -44,5 +44,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 .range([0, graphWidth]);
 
             var xAxis = d3.axisBottom().scale(xScale);
+
+            svgContainer
+                .append('g')
+                .call(xAxis)
+                .attr('id', 'x-axis')
+                .attr('transform', 'translate(60, 400)');
         });
 });
