@@ -13,7 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     d3.json(dataSource)
         .then((jsonData) => {
-            var dates = jsonData.data.map(function (item) {
+            var dateObjects = jsonData.data.map(function (item) {
+                return new Date(item[0]);
+            });
+
+            var dateStrings = jsonData.data.map(function (item) {
                 var year = item[0].substring(0, 4);
                 var month = item[0].substring(5, 7);
                 var quarter;
@@ -30,5 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 return year + ' ' + quarter;
             });
+
+            var xMax = new Date(d3.max(dateObjects));
+            xMax.setMonth(xMax.getMonth() + 3);
+
+            var xScale = d3
+                .scaleTime()
+                .domain([d3.min(dateObjects), xMax])
+                .range([0, graphWidth]);
+
+            var xAxis = d3.axisBottom().scale(xScale);
         });
 });
