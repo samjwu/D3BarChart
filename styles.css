@@ -2,3 +2,47 @@
     margin: 0;
     padding: 0;
 }
+
+.bg {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #222222;
+    background-size: 64px 128px;
+}
+
+.container {
+    height: 560px;
+    width: 900px;
+    background-color: #999;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 20px 20px;
+    align-self: center;
+    position: relative;
+}
+
+#title {
+    color: white;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.graph {
+    position: absolute;
+    top: 6em;
+}
+
+g {
+    color: white;
+}
+
+#x-axis path {
+    stroke: white !important;
+}
+
+#y-axis path {
+    stroke: white !important;
+}
