@@ -16,7 +16,7 @@
 .container {
     height: 560px;
     width: 900px;
-    background-color: #999;
+    background-color: black;
     display: flex;
     flex-direction: column;
     padding: 20px 20px 20px 20px;
@@ -45,4 +45,8 @@ g {
 
 #y-axis path {
     stroke: white !important;
+}
+
+rect {
+    fill: lightblue;
 }

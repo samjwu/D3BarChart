@@ -76,5 +76,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 .call(yAxis)
                 .attr('id', 'y-axis')
                 .attr('transform', 'translate(60, 0)');
+
+            d3.select('svg')
+                .selectAll('rect')
+                .data(scaledGDP)
+                .enter()
+                .append('rect')
+                .attr('data-date', function (d, i) {
+                    return jsonData.data[i][0];
+                })
+                .attr('data-gdp', function (d, i) {
+                    return jsonData.data[i][1];
+                })
+                .attr('class', 'bar')
+                .attr('x', function (d, i) {
+                    return xScale(dateObjects[i]);
+                })
+                .attr('y', function (d) {
+                    return graphHeight - d;
+                })
+                .attr('width', barWidth)
+                .attr('height', function (d) {
+                    return d;
+                })
+                .attr('transform', 'translate(60, 0)')
         });
 });
