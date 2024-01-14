@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     d3.json(dataSource)
         .then((jsonData) => {
+            // x
             var dateObjects = jsonData.data.map(function (item) {
                 return new Date(item[0]);
             });
@@ -50,5 +51,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 .call(xAxis)
                 .attr('id', 'x-axis')
                 .attr('transform', 'translate(60, 400)');
+
+            // y
+            var GDP = jsonData.data.map(function (item) {
+                return item[1];
+            });
+
+            var scaledGDP = [];
+
+            var yMax = d3.max(GDP);
+
+            var linearScale = d3.scaleLinear().domain([0, yMax]).range([0, graphHeight]);
+
+            scaledGDP = GDP.map(function (item) {
+                return linearScale(item);
+            });
+
+            var yScale = d3.scaleLinear().domain([0, yMax]).range([graphHeight, 0]);
+
+            var yAxis = d3.axisLeft(yScale);
+
+            svgContainer
+                .append('g')
+                .call(yAxis)
+                .attr('id', 'y-axis')
+                .attr('transform', 'translate(60, 0)');
         });
 });
