@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .attr('transform', 'translate(60, 10)')
                 .attr('index', (d, i) => i)
-                .on('mouseover', function (event, d) {
+                .on('mouseover', function (d) {
                     var i = this.getAttribute('index');
                     var barX = xScale(dateObjects[i]) + 60;
 
