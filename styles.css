@@ -48,5 +48,20 @@ g {
 }
 
 rect {
-    fill: lightblue;
+    fill: cyan;
+}
+
+#tooltip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    background: lightblue;
+    pointer-events: none;
+}
+
+.overlay {
+    position: absolute;
+    background: white;
+    pointer-events: none;
 }
