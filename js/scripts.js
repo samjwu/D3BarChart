@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .select('.graph')
         .append('svg')
         .attr('width', graphWidth + 100)
-        .attr('height', graphHeight + 60);
+        .attr('height', graphHeight + 100);
 
     d3.json(dataSource)
         .then((jsonData) => {
@@ -50,30 +50,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 .domain([d3.min(dateObjects), xMax])
                 .range([0, graphWidth]);
 
-            var xAxis = d3.axisBottom().scale(xScale);
+            var xAxis = d3.axisBottom()
+                .scale(xScale);
 
             svgContainer
                 .append('g')
                 .call(xAxis)
                 .attr('id', 'x-axis')
-                .attr('transform', 'translate(60, 400)');
+                .attr('transform', 'translate(60, 410)');
 
             // y
             var GDP = jsonData.data.map(function (item) {
                 return item[1];
             });
 
-            var scaledGDP = [];
-
             var yMax = d3.max(GDP);
 
-            var linearScale = d3.scaleLinear().domain([0, yMax]).range([0, graphHeight]);
+            var linearScale = d3.scaleLinear()
+                .domain([0, yMax])
+                .range([0, graphHeight]);
 
-            scaledGDP = GDP.map(function (item) {
+            var scaledGDP = GDP.map(function (item) {
                 return linearScale(item);
             });
 
-            var yScale = d3.scaleLinear().domain([0, yMax]).range([graphHeight, 0]);
+            var yScale = d3.scaleLinear()
+                .domain([0, yMax])
+                .range([graphHeight, 0]);
 
             var yAxis = d3.axisLeft(yScale);
 
@@ -81,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .append('g')
                 .call(yAxis)
                 .attr('id', 'y-axis')
-                .attr('transform', 'translate(60, 0)');
+                .attr('transform', 'translate(60, 10)');
 
             d3.select('svg')
                 .selectAll('rect')
@@ -105,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .attr('height', function (d) {
                     return d;
                 })
-                .attr('transform', 'translate(60, 0)')
+                .attr('transform', 'translate(60, 10)')
                 .attr('index', (d, i) => i)
                 .on('mouseover', function (event, d) {
                     var i = this.getAttribute('index');
@@ -118,21 +121,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         .style('width', barWidth + 'px')
                         .style('opacity', 0.9)
                         .style('left', barX + 'px')
-                        .style('top', graphHeight - d + 'px')
-                        .style('transform', 'translateX(0px)');
+                        .style('top', graphHeight + 10 - d + 'px');
                     tooltip.transition().duration(200).style('opacity', 0.9);
                     tooltip
                         .html(
                             dateStrings[i] +
                             '<br>' +
                             '$' +
-                            GDP[i].toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') +
+                            Math.floor(GDP[i]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '') +
                             ' Billion'
                         )
                         .attr('data-date', jsonData.data[i][0])
                         .style('left', barX + 30 + 'px')
-                        .style('top', graphHeight - 100 + 'px')
-                        .style('transform', 'translateX(0px)');
+                        .style('top', graphHeight - 100 + 'px');
                 })
                 .on('mouseout', function () {
                     tooltip.transition().duration(200).style('opacity', 0);
